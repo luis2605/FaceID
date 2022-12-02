@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Courier New", "Courier", monospace;
 
   background: #606c88;
   background: -webkit-radial-gradient(circle, #606c88 0%, #3f4c6b 100%);

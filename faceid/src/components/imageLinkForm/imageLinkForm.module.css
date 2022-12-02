@@ -1,8 +1,30 @@
 .form-container {
   margin: 0 auto;
+  padding: 1em 0.5em;
   width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: nowrap;
+  -webkit-box-shadow: 3px 3px 10px 3px #3d3d3d;
+  -moz-box-shadow: 3px 3px 10px 3px #3d3d3d;
+  box-shadow: 3px 3px 10px 3px #3d3d3d;
+  border-radius: 15px;
+  background-color: rgb(129, 145, 158);
 }
 
 .intro-text {
   font-size: 1.2rem;
+  color: black;
+  margin: 2.2em auto;
+  word-spacing: 3px;
+  text-align: center;
+}
+
+.input-container {
+  width: 250px;
+  display: flex;
+  margin-bottom: 2em;
 }

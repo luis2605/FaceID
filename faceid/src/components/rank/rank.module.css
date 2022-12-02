@@ -1,0 +1,23 @@
+.rank-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1em auto;
+  align-items: center;
+  justify-content: center;
+  color: aliceblue;
+}
+.rank-title {
+  margin: 0 1em;
+  text-align: center;
+}
+.rank-rank {
+  font-size: 2.5rem;
+  margin-left: 2em;
+}
+/*aux*/
+.small {
+  font-size: 1.8em;
+}
+.mr-0-2 {
+  margin-right: 0.2em;
+}

@@ -7,13 +7,7 @@ const Logo = () => {
   return (
     <div className={classes["logo-container"]}>
       <Tilt>
-        <div
-          //   style={{
-          //     height: "150px",
-          //     width: "150px",
-          //   }}
-          className={classes["icon-container"]}
-        >
+        <div className={classes["icon-container"]}>
           {" "}
           <img className={classes["icon"]} src={icon} alt="icon" />
           <h1 className={classes["title"]}>FaceID</h1>
