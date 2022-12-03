@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navigation from "./components/navigation/Navigation";
 import Logo from "./components/logo/Logo";
 import Rank from "./components/rank/Rank";
@@ -7,19 +7,128 @@ import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import matrix from "./assets/img/matrix.jpg";
+import FaceRecognition from "./components/faceRecognition/FaceRecognition";
+import FormPhotoContainer from "./components/FormPhotoContainer/FormPhotoContainer";
 
 const App = () => {
+  const [input, setInput] = useState("");
+  const [boxes, setBoxes] = useState({});
+  const [boxesCalculated, setBoxesCalculated] = useState({});
+
+  //get the input from the input element
+  const onInputChange = (event) => {
+    let validEntry = event.target.value.trim().length;
+    let https =
+      event.target.value.includes("https") ||
+      event.target.value.includes("http");
+    if (validEntry > 10 && https) {
+      console.log(https);
+      setInput((prev) => {
+        return (prev = event.target.value);
+      });
+    } else return 0;
+  };
+  //detect button
+
+  const onBtnSubmit = () => {
+    console.log(input);
+
+    //help me => user_id can be found in multiple ways, one way is in https://portal.clarifai.com/settings/profile
+    const USER_ID = "luisrondon";
+
+    // Your PAT (Personal Access Token) can be found in the portal under Authentification
+    // help me => PAT can be found in https://portal.clarifai.com/settings/authentication (create one if necessary!)
+    const PAT = "978ded0f14b04efb9b492f6eab690384";
+
+    // help me => App Id is just the name of your app on the portal.
+    const APP_ID = "faceApp";
+
+    // Change these to whatever model and image input you want to use
+    // help me => https://help.clarifai.com/hc/en-us/articles/1500007677141-Where-to-find-your-Model-IDs-and-Model-Version-IDs
+    const MODEL_ID = "general-image-detection";
+    const MODEL_VERSION_ID = "1580bb1932594c93b7e2e04456af7c6f";
+
+    const IMAGE_URL = input;
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    // YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
+    ///////////////////////////////////////////////////////////////////////////////////
+    const raw = JSON.stringify({
+      user_app_id: {
+        user_id: USER_ID,
+        app_id: APP_ID,
+      },
+      inputs: [
+        {
+          data: {
+            image: {
+              url: IMAGE_URL,
+            },
+          },
+        },
+      ],
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Key " + PAT,
+      },
+      body: raw,
+    };
+
+    fetch(
+      "https://api.clarifai.com/v2/models/" +
+        MODEL_ID +
+        "/versions/" +
+        MODEL_VERSION_ID +
+        "/outputs",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setBoxes([
+          result.outputs[0].data.regions.map((box) => {
+            return box.region_info.bounding_box;
+          }),
+        ]);
+      })
+
+      .catch((error) => console.log("error", error));
+
+    calculateBoxLocation(boxes);
+  };
+
+  const calculateBoxLocation = (data) => {
+    const image = document.getElementById("inputImage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+
+    setBoxesCalculated((prev) => {
+      return (prev = data[0].map((box) => {
+        return {
+          leftCol: box.left_col * width,
+          topRow: box.top_row * height,
+          rightCol: width - box.right_col * width,
+          bottomRow: height - box.bottom_row * height,
+        };
+      }));
+    });
+  };
+
+  //this is related to the particles
   const particlesInit = useCallback(async (engine) => {
     console.log(engine);
-    // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
+
     await loadFull(engine);
   }, []);
 
   const particlesLoaded = useCallback(async (container) => {
     await console.log(container);
   }, []);
+
   return (
     <div>
       <Particles
@@ -152,12 +261,18 @@ const App = () => {
       />
       <Navigation />
       <Logo />
-      <Rank />
-      <ImageLinkForm />
-
-      {/* 
-        
-        <FaceRecognition /> */}
+      <FormPhotoContainer>
+        <Rank />
+        <ImageLinkForm
+          onInputChange={onInputChange}
+          onBtnSubmit={onBtnSubmit}
+        />
+      </FormPhotoContainer>
+      <FaceRecognition
+        onBoxesCalculated={boxesCalculated}
+        onBoxes={boxes}
+        onInput={input}
+      />
     </div>
   );
 };
