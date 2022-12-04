@@ -98,24 +98,26 @@ const App = () => {
 
       .catch((error) => console.log("error", error));
 
-    calculateBoxLocation(boxes);
-  };
+    const calculateBoxLocation = (data) => {
+      const image = document.getElementById("inputImage");
+      const width = Number(image.width);
+      const height = Number(image.height);
 
-  const calculateBoxLocation = (data) => {
-    const image = document.getElementById("inputImage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-
-    setBoxesCalculated((prev) => {
-      return (prev = data[0].map((box) => {
-        return {
-          leftCol: box.left_col * width,
-          topRow: box.top_row * height,
-          rightCol: width - box.right_col * width,
-          bottomRow: height - box.bottom_row * height,
-        };
-      }));
-    });
+      console.log(data[0]);
+      setBoxesCalculated((prev) => {
+        return (prev = data[0].map((box) => {
+          return {
+            leftCol: box.left_col * width,
+            topRow: box.top_row * height,
+            rightCol: width - box.right_col * width,
+            bottomRow: height - box.bottom_row * height,
+          };
+        }));
+      });
+    };
+    if (boxes.length > 0) {
+      calculateBoxLocation(boxes);
+    } else return;
   };
 
   //this is related to the particles
@@ -268,11 +270,8 @@ const App = () => {
           onBtnSubmit={onBtnSubmit}
         />
       </FormPhotoContainer>
-      <FaceRecognition
-        onBoxesCalculated={boxesCalculated}
-        onBoxes={boxes}
-        onInput={input}
-      />
+
+      <FaceRecognition onBoxesCalculated={boxesCalculated} onInput={input} />
     </div>
   );
 };
