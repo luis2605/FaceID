@@ -89,35 +89,33 @@ const App = () => {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setBoxes([
-          result.outputs[0].data.regions.map((box) => {
-            return box.region_info.bounding_box;
-          }),
-        ]);
+        setBoxes((prev) => {
+          return (prev = result);
+        });
       })
 
       .catch((error) => console.log("error", error));
 
-    const calculateBoxLocation = (data) => {
+    const calculateBoxLocation = (info) => {
       const image = document.getElementById("inputImage");
       const width = Number(image.width);
       const height = Number(image.height);
-
-      console.log(data[0]);
-      setBoxesCalculated((prev) => {
-        return (prev = data[0].map((box) => {
-          return {
-            leftCol: box.left_col * width,
-            topRow: box.top_row * height,
-            rightCol: width - box.right_col * width,
-            bottomRow: height - box.bottom_row * height,
-          };
-        }));
+      const positionDef = info.outputs[0].data.regions.map((box) => {
+        return {
+          leftCol: box.region_info.bounding_box.left_col * width,
+          topRow: box.region_info.bounding_box.top_row * height,
+          rightCol: width - box.region_info.bounding_box.right_col * width,
+          bottomRow: height - box.region_info.bounding_box.bottom_row * height,
+          definition: box.data.concepts[0].name,
+        };
       });
+      console.log(positionDef);
+      return positionDef;
     };
-    if (boxes.length > 0) {
-      calculateBoxLocation(boxes);
-    } else return;
+    console.log(calculateBoxLocation(boxes));
+    setBoxesCalculated((prev) => {
+      return (prev = calculateBoxLocation(boxes));
+    });
   };
 
   //this is related to the particles

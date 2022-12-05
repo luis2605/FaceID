@@ -12,6 +12,12 @@ const FaceRecognition = ({ onBoxesCalculated, onInput }) => {
       setShowBoxes((prev) => {
         return (prev = true);
       });
+
+      const definitionsMap = onBoxesCalculated.map((definition) => {
+        return definition.definition;
+      });
+
+      console.log(definitionsMap);
       //mapping on the border props
       const boxesBoundaries = onBoxesCalculated.map((box) => {
         return (
@@ -24,7 +30,7 @@ const FaceRecognition = ({ onBoxesCalculated, onInput }) => {
               left: box.leftCol,
             }}
           >
-            <p>box</p>
+            <p className={classes["img-tags"]}>{box.definition}</p>
           </div>
         );
       });
@@ -38,12 +44,17 @@ const FaceRecognition = ({ onBoxesCalculated, onInput }) => {
   return (
     <div className={classes["photo-container"]}>
       <img
+        style={{
+          width: "600px",
+          height: "500px",
+        }}
         id="inputImage"
         className={classes["url-img"]}
         src={onInput}
         alt=""
       ></img>
-      <div>{showBoxes && boxes}</div>
+
+      <div className={classes["definitions-box"]}>{showBoxes && boxes}</div>
     </div>
   );
 };
