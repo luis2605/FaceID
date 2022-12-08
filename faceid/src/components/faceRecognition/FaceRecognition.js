@@ -44,10 +44,12 @@ const FaceRecognition = ({ onBoxesCalculated, onInput }) => {
   return (
     <div className={classes["photo-container"]}>
       <img
-        style={{
-          width: "600px",
-          height: "500px",
-        }}
+        style={
+          {
+            // width: "600px",
+            // height: "500px",
+          }
+        }
         id="inputImage"
         className={classes["url-img"]}
         src={onInput}

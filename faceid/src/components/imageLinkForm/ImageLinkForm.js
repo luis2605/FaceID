@@ -9,6 +9,7 @@ const ImageLinkForm = ({ onInputChange, onBtnSubmit }) => {
       </p>
       <div className={classes["input-container"]}>
         <input
+          id="input-field"
           onChange={onInputChange}
           type="text"
           placeholder="Place a URL here ..."

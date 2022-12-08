@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "./components/navigation/Navigation";
 import Logo from "./components/logo/Logo";
 import Rank from "./components/rank/Rank";
@@ -9,11 +9,31 @@ import { loadFull } from "tsparticles";
 import matrix from "./assets/img/matrix.jpg";
 import FaceRecognition from "./components/faceRecognition/FaceRecognition";
 import FormPhotoContainer from "./components/FormPhotoContainer/FormPhotoContainer";
+import "./App.css";
+import Signin from "./components/signin/Signin";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   const [input, setInput] = useState("");
   const [boxes, setBoxes] = useState({});
   const [boxesCalculated, setBoxesCalculated] = useState({});
+  const [showSignin, setShowSignin] = useState(true);
+
+  //signin btn
+
+  const signinBtn = () => {
+    setShowSignin((prev) => {
+      return (prev = false);
+    });
+  };
+
+  //signout btn
+
+  const signoutBtn = () => {
+    setShowSignin((prev) => {
+      return (prev = true);
+    });
+  };
 
   //get the input from the input element
   const onInputChange = (event) => {
@@ -21,6 +41,7 @@ const App = () => {
     let https =
       event.target.value.includes("https") ||
       event.target.value.includes("http");
+
     if (validEntry > 10 && https) {
       console.log(https);
       setInput((prev) => {
@@ -28,11 +49,9 @@ const App = () => {
       });
     } else return 0;
   };
-  //detect button
+  //activate the api
 
-  const onBtnSubmit = () => {
-    console.log(input);
-
+  useEffect(() => {
     //help me => user_id can be found in multiple ways, one way is in https://portal.clarifai.com/settings/profile
     const USER_ID = "luisrondon";
 
@@ -95,7 +114,11 @@ const App = () => {
       })
 
       .catch((error) => console.log("error", error));
+  }, [input]);
 
+  //detect button
+
+  const onBtnSubmit = () => {
     const calculateBoxLocation = (info) => {
       const image = document.getElementById("inputImage");
       const width = Number(image.width);
@@ -112,10 +135,17 @@ const App = () => {
       console.log(positionDef);
       return positionDef;
     };
-    console.log(calculateBoxLocation(boxes));
+
     setBoxesCalculated((prev) => {
       return (prev = calculateBoxLocation(boxes));
     });
+
+    //reset input
+
+    const inputTobeCleared = document.getElementById("input-field");
+    if (inputTobeCleared.value !== "") {
+      inputTobeCleared.value = "";
+    }
   };
 
   //this is related to the particles
@@ -130,7 +160,8 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <div className={"app-container"}>
+      {showSignin && <Signin onSigninBtn={signinBtn} />}
       <Particles
         id="tsparticles"
         init={particlesInit}
@@ -142,7 +173,7 @@ const App = () => {
           },
           particles: {
             number: {
-              value: 80,
+              value: 30,
               density: {
                 enable: true,
                 value_area: 800,
@@ -251,7 +282,7 @@ const App = () => {
           background: {
             color: "#ffffff",
             image:
-              // "url('https://images2.alphacoders.com/778/thumb-1920-77840.jpg')",
+              // "url('https://img.freepik.com/free-vector/abstract-background-with-squares_23-2148995948.jpg?w=2000')",
               `url(${matrix})`,
             position: "50% 50%",
             repeat: "no-repeat",
@@ -259,7 +290,7 @@ const App = () => {
           },
         }}
       />
-      <Navigation />
+      <Navigation onSignoutBtn={signoutBtn} />
       <Logo />
       <FormPhotoContainer>
         <Rank />

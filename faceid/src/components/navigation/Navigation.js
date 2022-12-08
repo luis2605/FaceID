@@ -1,17 +1,21 @@
 import React from "react";
 import classes from "./navigation.module.css";
 
-const Navigation = () => {
+const Navigation = ({ onSignoutBtn }) => {
   return (
     <nav className={classes["nav-container"]}>
       <h1 className={classes["nav-title"]}>A programm to check faces ... </h1>
 
       <div className={classes["glitch-wrapper"]}>
-        <div className={classes["glitch"]} data-glitch="glitch">
+        {/* <div className={classes["glitch"]} data-glitch="glitch">
           Sign In
-        </div>
+        </div> */}
 
-        <div className={classes["glitch"]} data-glitch="glitch">
+        <div
+          className={classes["glitch"]}
+          data-glitch="glitch"
+          onClick={onSignoutBtn}
+        >
           Sign Out
         </div>
       </div>

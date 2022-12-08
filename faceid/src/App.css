@@ -1,0 +1,10 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  opacity: 0.9;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: nowrap;
+}
