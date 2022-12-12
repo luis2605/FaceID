@@ -12,12 +12,14 @@ import FormPhotoContainer from "./components/FormPhotoContainer/FormPhotoContain
 import "./App.css";
 import Signin from "./components/signin/Signin";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Register from "./components/register/Register";
 
 const App = () => {
   const [input, setInput] = useState("");
   const [boxes, setBoxes] = useState({});
   const [boxesCalculated, setBoxesCalculated] = useState({});
   const [showSignin, setShowSignin] = useState(true);
+  const [showRegister, setShowRegister] = useState(false);
 
   //signin btn
 
@@ -32,6 +34,30 @@ const App = () => {
   const signoutBtn = () => {
     setShowSignin((prev) => {
       return (prev = true);
+    });
+  };
+  //register btn (register btn on Signin component)
+
+  const registerBtn = () => {
+    setShowSignin((prev) => {
+      return (prev = false);
+    });
+
+    setShowRegister((prev) => {
+      return (prev = true);
+    });
+    console.log(showRegister, showSignin);
+  };
+
+  // finishing register proccess (register btn on Register component)
+
+  const finishingRegisterBtn = () => {
+    setShowSignin((prev) => {
+      return (prev = false);
+    });
+
+    setShowRegister((prev) => {
+      return (prev = false);
     });
   };
 
@@ -161,7 +187,16 @@ const App = () => {
 
   return (
     <div className={"app-container"}>
-      {showSignin && <Signin onSigninBtn={signinBtn} />}
+      {showSignin && (
+        <Signin onSigninBtn={signinBtn} onRegisterBtn={registerBtn} />
+      )}
+      {showRegister && (
+        <Register
+          onSigninBtn={signinBtn}
+          onRegisterBtn={registerBtn}
+          OnFinishingRegisterBtn={finishingRegisterBtn}
+        />
+      )}
       <Particles
         id="tsparticles"
         init={particlesInit}

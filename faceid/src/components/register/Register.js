@@ -1,13 +1,20 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import classes from "./signin.module.css";
+import classes from "./register.module.css";
 
-const Singin = ({ onSigninBtn, onRegisterBtn }) => {
+const Register = ({ onSigninBtn, onRegisterBtn, OnFinishingRegisterBtn }) => {
   return (
-    <div className={classes["signin-container"]}>
+    <div className={classes["register-container"]}>
       <Form>
-        <h1 className={classes["signin-title"]}> Sign In</h1>
+        <h1 className={classes["register-title"]}> Sign In</h1>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Namer</Form.Label>
+          <Form.Control type="text" placeholder="Enter your name" />
+          <Form.Text className="text-muted">
+            This personal information is secured according to the european DSGVO
+          </Form.Text>
+        </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" />
@@ -21,13 +28,17 @@ const Singin = ({ onSigninBtn, onRegisterBtn }) => {
           <Form.Control type="password" placeholder="Password" />
         </Form.Group>
         {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group> */}
+          <Form.Check type="checkbox" label="Check me out" />
+        </Form.Group> */}
         <div className={classes["btn-container"]}>
           <Button variant="dark" type="submit" onClick={onSigninBtn}>
             Sign in
           </Button>
-          <Button variant="secondary" type="button" onClick={onRegisterBtn}>
+          <Button
+            variant="secondary"
+            type="submit"
+            onClick={OnFinishingRegisterBtn}
+          >
             Register
           </Button>
         </div>
@@ -36,4 +47,4 @@ const Singin = ({ onSigninBtn, onRegisterBtn }) => {
   );
 };
 
-export default Singin;
+export default Register;
